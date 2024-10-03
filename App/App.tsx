@@ -15,7 +15,7 @@ type RootStackParamList = {
 };
 
 // Type the props used by the screens
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home 123'>;
 type TestScreenProps = NativeStackScreenProps<RootStackParamList, 'Test'>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
