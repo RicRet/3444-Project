@@ -6,6 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';  // Imp
 type RootStackParamList = {
   Home: undefined;
   Test: undefined;
+  Login: undefined;
 };
 
 // Define the props type for the TestScreen

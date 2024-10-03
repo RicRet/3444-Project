@@ -17,6 +17,7 @@ type RootStackParamList = {
 // Type the props used by the screens
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 type TestScreenProps = NativeStackScreenProps<RootStackParamList, 'Test'>;
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,7 +35,7 @@ export default function App() {
           component={(props: TestScreenProps) => <TestScreen {...props} />}
         />
         <Stack.Screen
-          name="Home"
+          name="Login"
           component={(props: LoginScreenProps) => <LoginScreen {...props} />}
           />
       </Stack.Navigator>
