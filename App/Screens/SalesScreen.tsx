@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Image, Button, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -8,15 +8,16 @@ type RootStackParamList = {
   Test: undefined;
   Login: undefined;
   MB: undefined;
+  Event: undefined;
   Sales: undefined;
   Maps: undefined;
   Post: undefined;
 };
 
-type MBScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MB'>;
+type SalesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Sales'>;
 
-const MBScreen: React.FC = () => {
-  const navigation = useNavigation<MBScreenNavigationProp>();
+const SalesScreen: React.FC = () => {
+  const navigation = useNavigation<SalesScreenNavigationProp>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,30 +27,31 @@ const MBScreen: React.FC = () => {
     });
   }, [navigation]);
 
+  // Dummy topics
   const topics = [
     {
       id: 1,
-      title: 'Subleasing apartment for 2025-2026 for 43214 per month (utilities not included)',
+      title: 'Selling used Couch',
       author: 'Jim Tims',
       replies: 5,
       lastActivity: '2 hours ago',
-      imageUrl: 'https://preview.redd.it/ox3r5bnirafd1.jpeg?width=1080&crop=smart&auto=webp&s=efdc91b37713002c8e0227a5ac7084e319eb4955',
+      imageUrl: 'https://preview.redd.it/couch-that-guy-is-trying-to-sell-me-says-its-lightly-used-v0-f559mws6yfsb1.jpg?width=1080&crop=smart&auto=webp&s=6ae1382320005aa7af22ce5cc24da651d0a4ed40',
     },
     {
       id: 2,
-      title: 'Dogs',
+      title: 'Anyone need a calculus textbook?',
       author: 'John Johnsons',
       replies: 8,
       lastActivity: '1 hour ago',
-      imageUrl: 'http://4.bp.blogspot.com/-W_91tkdkDQ8/T-BcpLwTkII/AAAAAAAADGA/JahAZqxAiX0/s1600/2-Cute-Puppies-1.jpeg',
+      imageUrl: 'https://preview.redd.it/calculus-early-transcendentals-textbook-for-sale-v0-07mwtyt2vgkd1.jpg?width=1080&crop=smart&auto=webp&s=02cdda8bcea6fb4974ac416053b61b79aa4977f1',
     },
     {
       id: 3,
-      title: 'Has anyone taken CS 420?',
+      title: 'Math tutoring services, please call if interested',
       author: 'Smith Smithsons',
       replies: 42,
       lastActivity: '1 hour ago',
-      imageUrl: 'https://i.pinimg.com/736x/0c/7b/a0/0c7ba0a7f5a817a2765147d9066c7122.jpg',
+      imageUrl: 'https://th.bing.com/th/id/OIP.EOYrVYtrBoZ5I445yQOMsgHaFV?rs=1&pid=ImgDetMain',
     },
   ];
 
@@ -58,13 +60,16 @@ const MBScreen: React.FC = () => {
       <View style={styles.content}>
         <Text style={styles.heading}>Forum Topics</Text>
 
+        {/* Topic List */}
         {topics.map((topic) => (
           <View key={topic.id} style={styles.topicCard}>
+            {/* Image with text overlay */}
             <View style={styles.imageContainer}>
               <Image source={{ uri: topic.imageUrl }} style={styles.topicImage} resizeMode="cover" />
               <Text style={styles.imageOverlayText}>{topic.title}</Text>
             </View>
 
+            {/* Topic Details */}
             <View style={styles.topicDetails}>
               <TouchableOpacity>
                 <Text style={styles.topicTitle}>{topic.title}</Text>
@@ -151,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MBScreen;
+export default SalesScreen;
