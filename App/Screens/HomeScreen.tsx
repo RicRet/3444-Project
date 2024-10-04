@@ -7,6 +7,7 @@ type RootStackParamList = {
   Home: undefined;
   Test: undefined;
   Login: undefined;
+  MB: undefined;
 };
 
 // Define the props type for the HomeScreen
@@ -16,13 +17,13 @@ const HomeScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       {/* Heading Text */}
-      <Text style={styles.heading}>Home Screen</Text>
+      <Text style={styles.heading}>Eagle Eye</Text>
 
       {/* Button Container */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.customButton}
-          onPress={() => navigation.navigate('Test')}
+          onPress={() => navigation.navigate('MB')}
         >
           <Text style={styles.buttonText}>Go to Details</Text>
         </TouchableOpacity>

@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Image } from 'react-native';
 import { Button, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+type RootStackParamList = {
+  Home: undefined;
+  Test: undefined;
+  Login: undefined;
+  MB: undefined;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, 'MB'>;
 
 // Topic info
 interface Topic {
@@ -12,10 +21,9 @@ interface Topic {
   lastActivity: string; 
   imageUrl: string;
 }
-
-const MBOverview: React.FC = () => {
+const MBScreen: React.FC = () => {
   // Dummy topics
-  const topics: Topic[] = [
+  const topics: Topic[] =  [
     {
       id: 1,
       title: 'Subleasing apartment for 2025-2026 for 43214 per month (utilities not included)',
@@ -33,22 +41,29 @@ const MBOverview: React.FC = () => {
       imageUrl: 'http://4.bp.blogspot.com/-W_91tkdkDQ8/T-BcpLwTkII/AAAAAAAADGA/JahAZqxAiX0/s1600/2-Cute-Puppies-1.jpeg',
     },
     {
-        id: 3,
-        title: 'Has anyone taken CS 420?',
-        author: 'Smith Smithsons',
-        replies: 42,
-        lastActivity: '1 hour ago',
-        imageUrl: 'https://i.pinimg.com/736x/0c/7b/a0/0c7ba0a7f5a817a2765147d9066c7122.jpg',
-      },
+      id: 3,
+      title: 'Has anyone taken CS 420?',
+      author: 'Smith Smithsons',
+      replies: 42,
+      lastActivity: '1 hour ago',
+      imageUrl: 'https://i.pinimg.com/736x/0c/7b/a0/0c7ba0a7f5a817a2765147d9066c7122.jpg',
+    },
   ];
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.heading}>Forum Topics</Text>
 
-        {/*Topic List*/}
+        {/* Topic List */}
         {topics.map((topic) => (
           <View key={topic.id} style={styles.topicCard}>
+            {/* Image with text overlay */}
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: topic.imageUrl }} style={styles.topicImage} resizeMode="cover" />
+              <Text style={styles.imageOverlayText}>{topic.title}</Text>
+            </View>
+
             {/* Topic Details */}
             <View style={styles.topicDetails}>
               <TouchableOpacity>
@@ -58,7 +73,6 @@ const MBOverview: React.FC = () => {
                 Posted by <Text style={styles.topicAuthor}>{topic.author}</Text> | {topic.replies} comments | Last activity: {topic.lastActivity}
               </Text>
             </View>
-            <Image source={{ uri: topic.imageUrl }} style={styles.topicImage} />
           </View>
         ))}
       </View>
@@ -83,7 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#119B28',
-    textAlign: 'center', 
+    textAlign: 'center',
   },
   topicCard: {
     flexDirection: 'column',
@@ -95,14 +109,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
   },
-  topicImage: {
-    width: '100%', 
-    height: 200, 
+  imageContainer: {
+    width: '100%',
+    height: 200,
     borderRadius: 5,
-    marginTop: 10,          
-  },    
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  topicImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 5,
+  },
+  imageOverlayText: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 3,
+  },
   topicDetails: {
     flex: 1,
+    marginTop: 10,
   },
   topicTitle: {
     color: '#119B28',
@@ -118,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MBOverview;
+export default MBScreen;

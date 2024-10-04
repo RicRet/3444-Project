@@ -7,6 +7,7 @@ type RootStackParamList = {
   Home: undefined;
   Test: undefined;
   Login: undefined;
+  MB: undefined;
 };
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;

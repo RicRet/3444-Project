@@ -7,6 +7,7 @@ type RootStackParamList = {
   Home: undefined;
   Test: undefined;
   Login: undefined;
+  MB: undefined;
 };
 
 // Define the props type for the TestScreen
