@@ -18,7 +18,7 @@ const MapsScreen: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Maps</Text>
-      
+
       <View style={styles.mapContainer}>
         <Image
           source={{ uri: 'https://pbs.twimg.com/media/DTR1DWQW0AAOs30.jpg' }}
@@ -27,7 +27,7 @@ const MapsScreen: React.FC<Props> = () => {
         />
         <Text style={styles.mapLabel}>UNT Main Campus</Text>
       </View>
-      
+
       <View style={styles.mapContainer}>
         <Image
           source={require('../Assets/images/DPMap.jpg')}

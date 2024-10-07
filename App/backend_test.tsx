@@ -1,4 +1,4 @@
-import axios from 'axios';
+/*import axios from 'axios';
 
 const fetchUsers = async () => {
   try {
@@ -9,7 +9,7 @@ const fetchUsers = async () => {
   }
 };
 
-/*
+
 const addUser = async (name, email) => {
   try {
     const response = await axios.post('http://localhost:5000/users', { name, email });

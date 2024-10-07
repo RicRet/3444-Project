@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Test'>;
 
 const TestScreen = ({ navigation }: Props) => {   // Use the typed Props here
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Test Screen</Text>
       <Button
         title="Go back"

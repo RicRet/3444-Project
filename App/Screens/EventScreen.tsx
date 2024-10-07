@@ -21,6 +21,7 @@ const EventScreen: React.FC = () => {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
         <Button title="Post" onPress={() => navigation.navigate('Post')} />
       ),
@@ -47,18 +48,18 @@ const EventScreen: React.FC = () => {
     },
     {
       id: 3,
-      title: 'Has anyone taken CS 420?',
+      title: 'Monthly Mobile Food Pantry!',
       author: 'Smith Smithsons',
       replies: 42,
       lastActivity: '1 hour ago',
-      imageUrl: 'https://i.pinimg.com/736x/0c/7b/a0/0c7ba0a7f5a817a2765147d9066c7122.jpg',
+      imageUrl: 'https://localist-images.azureedge.net/photos/47110919604249/huge/321fa456598ae5db29fb6783f713b36656345aa9.jpg',
     },
   ];
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.heading}>Forum Topics</Text>
+        <Text style={styles.heading}>Recent Posts</Text>
 
         {/* Topic List */}
         {topics.map((topic) => (

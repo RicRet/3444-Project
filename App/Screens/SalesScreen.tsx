@@ -21,6 +21,7 @@ const SalesScreen: React.FC = () => {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
         <Button title="Post" onPress={() => navigation.navigate('Post')} />
       ),
