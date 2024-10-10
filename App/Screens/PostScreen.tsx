@@ -3,15 +3,16 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-    Home: undefined;
-    Test: undefined;
-    Login: undefined;
-    MB: undefined;
-    Event: undefined;
-    Sales: undefined;
-    Maps: undefined;
-    Post: undefined;
-  };
+  Home: undefined;
+  Test: undefined;
+  Login: undefined;
+  MB: undefined;
+  Event: undefined;
+  Sales : undefined;
+  Maps: undefined;
+  Post: undefined;
+  SignUp: undefined;
+};
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Post'>;
 

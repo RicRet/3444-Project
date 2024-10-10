@@ -9,9 +9,10 @@ type RootStackParamList = {
   Login: undefined;
   MB: undefined;
   Event: undefined;
-  Sales: undefined;
+  Sales : undefined;
   Maps: undefined;
   Post: undefined;
+  SignUp: undefined;
 };
 
 type SalesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Sales'>;

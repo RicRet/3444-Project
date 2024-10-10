@@ -1,51 +1,47 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import axios from 'axios'; // Import axios for API calls
+import axios from 'axios';
 
-// Define the type for your navigation stack
-type RootStackParamList = {
-  Home: undefined;
-  Test: undefined;
-  Login: undefined;
-  MB: undefined;
-  Event: undefined;
-  Sales : undefined;
-  Maps: undefined;
-  Post: undefined;
-  SignUp: undefined;
-};
-
-type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
-
-const Login: React.FC<LoginScreenProps> = ({ navigation }) => {
+const SignUp: React.FC = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Function to handle login
-  const handleLogin = async () => {
-    if (email && password) {
+  // Function to handle sign up
+  const handleSignUp = async () => {
+    if (username && email && password) {
       try {
-        const response = await axios.post('http://192.168.1.32:5000/api/users/login', { email, password });
-        if (response.data.user) {
-          Alert.alert('Success', 'Logged in successfully');
-          navigation.navigate('Home'); // Redirect to Home on successful login
+        const response = await axios.post('http://192.168.1.32:5000/api/users', {
+          username,
+          email,
+          password
+        });
+        if (response.data) {
+          Alert.alert('Success', 'Sign up successful. You can now log in.');
         }
       } catch (error) {
-        Alert.alert('Error', 'Login failed. Please check your credentials.');
+        Alert.alert('Error', 'Sign up failed.');
       }
     } else {
-      Alert.alert('Error', 'Please enter both email and password.');
+      Alert.alert('Error', 'Please fill out all fields.');
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.text}>Login</Text>
+        <Text style={styles.text}>Sign Up</Text>
         <View style={styles.underline} />
       </View>
       <View style={styles.inputs}>
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Username"
+            style={styles.textInput}
+            value={username}
+            onChangeText={setUsername}
+          />
+        </View>
         <View style={styles.input}>
           <TextInput
             placeholder="Student Email"
@@ -65,17 +61,8 @@ const Login: React.FC<LoginScreenProps> = ({ navigation }) => {
           />
         </View>
       </View>
-      <Text style={styles.forgotPassword}>
-        Forgot Password? <Text style={styles.clickHere}>Click Here!</Text>
-      </Text>
       <View style={styles.submitContainer}>
-        <TouchableOpacity style={styles.submit} onPress={handleLogin}>
-          <Text>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.submit}
-          onPress={() => navigation.navigate('SignUp')} // Navigate to SignUp screen
-        >
+        <TouchableOpacity style={styles.submit} onPress={handleSignUp}>
           <Text>Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -116,27 +103,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
   },
-  forgotPassword: {
-    textAlign: 'center',
-    marginVertical: 10,
-    color: '#797979',
-  },
-  clickHere: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
   submitContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   submit: {
     backgroundColor: '#ddd',
     padding: 15,
     borderRadius: 5,
-    flex: 1,
-    marginHorizontal: 5,
+    width: '100%',
     alignItems: 'center',
   },
 });
 
-export default Login;
+export default SignUp;

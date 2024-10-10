@@ -9,6 +9,7 @@ import EventScreen from './Screens/EventScreen.tsx';
 import SalesScreen from './Screens/SalesScreen.tsx';
 import MapsScreen from './Screens/MapScreen.tsx';
 import PostScreen from './Screens/PostScreen.tsx';
+import SignUp from './Screens/SignUpScreen.tsx';
 
 // Define the type for your navigation stack
 type RootStackParamList = {
@@ -20,6 +21,7 @@ type RootStackParamList = {
   Sales : undefined;
   Maps: undefined;
   Post: undefined;
+  SignUp: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +39,7 @@ export default function App() {
         <Stack.Screen name ="Sales" component={SalesScreen} />
         <Stack.Screen name ="Maps" component={MapsScreen} />
         <Stack.Screen name = "Post" component={PostScreen} />
+        <Stack.Screen name ="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
   );

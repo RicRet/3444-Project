@@ -8,8 +8,10 @@ type RootStackParamList = {
   Login: undefined;
   MB: undefined;
   Event: undefined;
-  Sales: undefined;
-  Maps: undefined; // Add a screen for maps if needed
+  Sales : undefined;
+  Maps: undefined;
+  Post: undefined;
+  SignUp: undefined;
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Maps'>;
