@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Button, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { Image, Button, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
@@ -62,7 +62,7 @@ const MBScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.heading}>Forum Topics</Text>
 
         {topics.length > 0 ? (
@@ -88,7 +88,7 @@ const MBScreen: React.FC = () => {
         ) : (
           <Text>No topics available.</Text>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -96,13 +96,11 @@ const MBScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
     backgroundColor: '#f8f9fa',
   },
-  content: {
-    width: '90%',
+  scrollContent: {
+    alignItems: 'center',
+    padding: 20,
   },
   heading: {
     fontSize: 24,
@@ -119,6 +117,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
+    width: '90%',
   },
   imageContainer: {
     position: 'relative',
