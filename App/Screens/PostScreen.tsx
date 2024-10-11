@@ -16,45 +16,39 @@ type RootStackParamList = {
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Post'>;
 
-const createPost = async (heading: string, content: string, ownerId: string, imageUrl: string) => {
+const createPost = async (heading: string, content: string, imageUrl: string) => {
   try {
     const response = await axios.post('http://192.168.1.32:5000/api/dbposts', {
       heading,
       content,
-      ownerId,
+      ownerId: '1',  // Hardcoded Owner ID
       imageUrl,
     });
 
-    // Check if response.data is an object or a string and handle accordingly
     const successMessage = response.data.message || 'Post created successfully!';
     
     Alert.alert('Success', successMessage);
 
-    // Optionally navigate to another screen after posting
-    return true; // Indicate successful post for further action
+    return true;
   } catch (error) {
     Alert.alert('Error', 'Failed to create post.');
-    return false; // Indicate failure for further action
+    return false;
   }
 };
-
-
 
 const PostScreen: React.FC<Props> = () => {
   const [heading, setHeading] = useState('');
   const [content, setContent] = useState('');
-  const [ownerId, setOwnerId] = useState(''); // Assuming ownerId will be provided
   const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = async () => {
-    if (!heading || !content || !ownerId || !imageUrl) {
+    if (!heading || !content || !imageUrl) {
       Alert.alert('Error', 'All fields are required');
       return;
     }
-    await createPost(heading, content, ownerId, imageUrl);
+    await createPost(heading, content, imageUrl);
     setHeading('');
     setContent('');
-    setOwnerId(''); // Resetting ownerId after submission
     setImageUrl('');
   };
 
@@ -81,15 +75,6 @@ const PostScreen: React.FC<Props> = () => {
           onChangeText={setContent}
           multiline
           numberOfLines={4}
-        />
-
-        {/* Owner ID Input */}
-        <Text style={styles.label}>Owner ID</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Owner ID"
-          value={ownerId}
-          onChangeText={setOwnerId}
         />
 
         {/* Attach Image URL Input */}
