@@ -1,22 +1,50 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import axios from 'axios';
 
 type RootStackParamList = {
-  Home: undefined;
-  Test: undefined;
-  Login: undefined;
-  MB: undefined;
-  Event: undefined;
-  Sales : undefined;
-  Maps: undefined;
-  Post: undefined;
-  SignUp: undefined;
-};
+    Home: undefined;
+    Test: undefined;
+    Login: undefined;
+    MB: undefined;
+    Event: undefined;
+    Sales: undefined;
+    Maps: undefined;
+    Post: undefined;
+  };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Post'>;
 
+const createPost = async (title: string, description: string, image: string) => {
+  try {
+      const response = await axios.post('http://localhost:5000/users', {
+          title,
+          description,
+          image,
+      });
+      Alert.alert('Post created:', response.data);
+  } catch (error) {
+    Alert.alert('Error', 'Failed to create post.');
+  }
+};
+
 const PostScreen: React.FC = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState('');
+
+const handleSubmit = async () => {
+  if (!title || !description || !image) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+  }
+  await createPost(title, description, image);
+  setTitle('');
+  setDescription('');
+  setImage('');
+};
+
     return (
       <View style={styles.container}>
         <View style={styles.content}>
@@ -26,28 +54,34 @@ const PostScreen: React.FC = () => {
           <Text style={styles.label}>Post Title</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter your post title"
-            placeholderTextColor="#999"
+            placeholder="Title"
+            value={title}
+            onChangeText={setTitle}
           />
   
           {/* Description Input */}
           <Text style={styles.label}>Post Description</Text>
           <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Enter the details of your post"
-            placeholderTextColor="#999"
+            style={styles.input}
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
             multiline
             numberOfLines={4}
           />
   
           {/* Attach Image Button */}
-          <TouchableOpacity style={styles.attachButton}>
-            <Text style={styles.buttonText}>Attach Image</Text>
-          </TouchableOpacity>
+          <Text style={styles.label}>Attach image url</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="url"
+            value={image}
+            onChangeText={setImage}
+          />
   
           {/* Post Button */}
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Submit Post</Text>
+            <Text style={styles.buttonText} onPress={handleSubmit}>Submit Post</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -61,6 +95,7 @@ const PostScreen: React.FC = () => {
       alignItems: 'center',
       padding: 20,
       backgroundColor: '#f8f9fa',
+      bottom: 0,
     },
     content: {
       width: '90%',
