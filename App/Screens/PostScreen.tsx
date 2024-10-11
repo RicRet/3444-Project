@@ -5,13 +5,14 @@ import axios from 'axios';
 
 type RootStackParamList = {
     Home: undefined;
-    Test: undefined;
-    Login: undefined;
-    MB: undefined;
-    Event: undefined;
-    Sales: undefined;
-    Maps: undefined;
-    Post: undefined;
+  Test: undefined;
+  Login: undefined;
+  MB: undefined;
+  Event: undefined;
+  Sales : undefined;
+  Maps: undefined;
+  Post: undefined;
+  SignUp: undefined;
   };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Post'>;
