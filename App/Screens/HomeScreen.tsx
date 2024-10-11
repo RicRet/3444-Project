@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }: Props) => {
           style={styles.customButton}
           onPress={() => navigation.navigate('MB')}
         >
-          <Text style={styles.buttonText}>Disscussion Forum</Text>
+          <Text style={styles.buttonText}>Discussion Forum</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.customButton}
