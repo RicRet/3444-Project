@@ -32,11 +32,20 @@ const MapsScreen: React.FC<Props> = () => {
 
       <View style={styles.mapContainer}>
         <Image
-          source={require('../Assets/images/DPMap.jpg')}
+          source={require('../Assets/images/DPMap_1.jpg')}
           style={styles.mapImage}
           resizeMode="cover"
         />
-        <Text style={styles.mapLabel}>Discovery Park</Text>
+        <Text style={styles.mapLabel}>Discovery Park First Floor</Text>
+      </View>
+
+      <View style={styles.mapContainer}>
+        <Image
+          source={require('../Assets/images/DPMap2.jpg')}
+          style={styles.mapImage}
+          resizeMode="cover"
+        />
+        <Text style={styles.mapLabel}>Discovery Park Second Floor</Text>
       </View>
     </View>
   );
