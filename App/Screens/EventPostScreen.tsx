@@ -11,32 +11,31 @@ type RootStackParamList = {
   Event: undefined;
   Sales: undefined;
   Maps: undefined;
-  Post: undefined;
+  EventPost: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Post'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'EventPost'>;
 
-const createPost = async (heading: string, content: string, imageUrl: string) => {
+const createEventPost = async (heading: string, content: string, imageUrl: string) => {
   try {
-    const response = await axios.post('http://192.168.1.32:5000/api/dbposts', {
+    const response = await axios.post('http://192.168.1.32:5000/api/events', {
       heading,
       content,
       ownerId: '1',  // Hardcoded Owner ID
       imageUrl,
     });
 
-    const successMessage = response.data.message || 'Post created successfully!';
-    
+    const successMessage = response.data.message || 'Event post created successfully!';
     Alert.alert('Success', successMessage);
 
     return true;
   } catch (error) {
-    Alert.alert('Error', 'Failed to create post.');
+    Alert.alert('Error', 'Failed to create event post.');
     return false;
   }
 };
 
-const PostScreen: React.FC<Props> = () => {
+const EventPost: React.FC<Props> = () => {
   const [heading, setHeading] = useState('');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -46,7 +45,7 @@ const PostScreen: React.FC<Props> = () => {
       Alert.alert('Error', 'All fields are required');
       return;
     }
-    await createPost(heading, content, imageUrl);
+    await createEventPost(heading, content, imageUrl);
     setHeading('');
     setContent('');
     setImageUrl('');
@@ -55,10 +54,10 @@ const PostScreen: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.heading}>Create a New Post</Text>
+        <Text style={styles.heading}>Create a New Event Post</Text>
 
         {/* Heading Input */}
-        <Text style={styles.label}>Post Heading</Text>
+        <Text style={styles.label}>Event Heading</Text>
         <TextInput
           style={styles.input}
           placeholder="Heading"
@@ -67,7 +66,7 @@ const PostScreen: React.FC<Props> = () => {
         />
 
         {/* Content Input */}
-        <Text style={styles.label}>Post Content</Text>
+        <Text style={styles.label}>Event Content</Text>
         <TextInput
           style={styles.input}
           placeholder="Content"
@@ -88,7 +87,7 @@ const PostScreen: React.FC<Props> = () => {
 
         {/* Post Button */}
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit Post</Text>
+          <Text style={styles.buttonText}>Submit Event Post</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -153,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostScreen;
+export default EventPost;
