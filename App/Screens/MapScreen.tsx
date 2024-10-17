@@ -10,7 +10,6 @@ type RootStackParamList = {
   Event: undefined;
   Sales : undefined;
   Maps: undefined;
-  Post: undefined;
   SignUp: undefined;
 };
 
