@@ -35,7 +35,7 @@ const MBScreen: React.FC = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button title="Post" onPress={() => navigation.navigate('Post')} />
+        <Button title="Post" onPress={() => navigation.navigate('MBPost')} />
       ),
     });
   }, [navigation]);
