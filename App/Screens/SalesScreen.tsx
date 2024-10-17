@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Image, Button, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, Button, View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -58,7 +58,8 @@ const SalesScreen: React.FC = () => {
   ];
 
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
       <View style={styles.content}>
         <Text style={styles.heading}>Forum Topics</Text>
 
@@ -68,7 +69,6 @@ const SalesScreen: React.FC = () => {
             {/* Image with text overlay */}
             <View style={styles.imageContainer}>
               <Image source={{ uri: topic.imageUrl }} style={styles.topicImage} resizeMode="cover" />
-              <Text style={styles.imageOverlayText}>{topic.title}</Text>
             </View>
 
             {/* Topic Details */}
@@ -83,21 +83,21 @@ const SalesScreen: React.FC = () => {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
     backgroundColor: '#f8f9fa',
   },
   content: {
-    width: '90%',
-    maxWidth: 600,
+    flex: 1,
+    width: '100%', 
+    justifyContent: 'flex-start',
   },
   heading: {
     fontSize: 24,
@@ -121,12 +121,10 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 5,
     overflow: 'hidden',
-    position: 'relative',
   },
   topicImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 5,
   },
   imageOverlayText: {
     position: 'absolute',
@@ -141,7 +139,6 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   topicDetails: {
-    flex: 1,
     marginTop: 10,
   },
   topicTitle: {
@@ -157,5 +154,6 @@ const styles = StyleSheet.create({
     color: '#117328',
   },
 });
+
 
 export default SalesScreen;
