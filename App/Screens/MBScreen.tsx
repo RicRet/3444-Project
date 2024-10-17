@@ -14,6 +14,7 @@ type RootStackParamList = {
   Maps: undefined;
   Post: undefined;
   SignUp: undefined;
+  MBPost: undefined;
 };
 
 type MBScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MB'>;
