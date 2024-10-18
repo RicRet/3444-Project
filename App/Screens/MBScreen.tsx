@@ -44,7 +44,7 @@ const MBScreen: React.FC = () => {
     // Fetch recent posts from the backend
     const fetchRecentPosts = async () => {
       try {
-        const response = await axios.get('http://192.168.1.32:5000/api/dbposts/recent?limit=10'); // Update with your actual API URL
+        const response = await axios.get('http://10.125.253.98:5000/api/dbposts/recent?limit=10'); // Update with your actual API URL
         setTopics(response.data); // Set the fetched posts
       } catch (error) {
         console.error('Error fetching recent posts:', error);

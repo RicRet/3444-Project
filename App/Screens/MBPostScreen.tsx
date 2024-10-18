@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'MBPost'>;
 
 const createPost = async (heading: string, content: string, imageUrl: string) => {
   try {
-    const response = await axios.post('http://192.168.1.32:5000/api/dbposts', {
+    const response = await axios.post('http://10.125.253.98:5000/api/dbposts', {
       heading,
       content,
       ownerId: '1',  // Hardcoded Owner ID

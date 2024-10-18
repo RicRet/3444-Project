@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'SalesPost'>;
 
 const createSalesPost = async (heading: string, content: string, imageUrl: string) => {
   try {
-    const response = await axios.post('http://192.168.0.1:5000/api/sales', {
+    const response = await axios.post('http:/10.125.253.98:5000/api/sales', {
       heading,
       content,
       ownerId: '1',  // Hardcoded Owner ID
