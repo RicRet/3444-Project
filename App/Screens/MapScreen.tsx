@@ -8,8 +8,9 @@ type RootStackParamList = {
   Login: undefined;
   MB: undefined;
   Event: undefined;
-  Sales: undefined;
-  Maps: undefined; // Add a screen for maps if needed
+  Sales : undefined;
+  Maps: undefined;
+  SignUp: undefined;
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Maps'>;
@@ -18,7 +19,7 @@ const MapsScreen: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Maps</Text>
-      
+
       <View style={styles.mapContainer}>
         <Image
           source={{ uri: 'https://pbs.twimg.com/media/DTR1DWQW0AAOs30.jpg' }}
@@ -27,14 +28,23 @@ const MapsScreen: React.FC<Props> = () => {
         />
         <Text style={styles.mapLabel}>UNT Main Campus</Text>
       </View>
-      
+
       <View style={styles.mapContainer}>
         <Image
-          source={require('../Assets/images/DPMap.jpg')}
+          source={require('../Assets/images/DPMap_1.jpg')}
           style={styles.mapImage}
           resizeMode="cover"
         />
-        <Text style={styles.mapLabel}>Discovery Park</Text>
+        <Text style={styles.mapLabel}>Discovery Park First Floor</Text>
+      </View>
+
+      <View style={styles.mapContainer}>
+        <Image
+          source={require('../Assets/images/DPMap2.jpg')}
+          style={styles.mapImage}
+          resizeMode="cover"
+        />
+        <Text style={styles.mapLabel}>Discovery Park Second Floor</Text>
       </View>
     </View>
   );

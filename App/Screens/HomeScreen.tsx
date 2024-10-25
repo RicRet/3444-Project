@@ -9,9 +9,9 @@ type RootStackParamList = {
   Login: undefined;
   MB: undefined;
   Event: undefined;
-  Sales: undefined;
+  Sales : undefined;
   Maps: undefined;
-  Post: undefined;
+  SignUp: undefined;
 };
 
 // Define the props type for the HomeScreen
@@ -34,33 +34,28 @@ const HomeScreen = ({ navigation }: Props) => {
         style={styles.logo}
         resizeMode="contain" // Adjust the resize mode to fit the image properly
       />
-
       {/* Heading Text */}
       <Text style={styles.heading}>Eagle Eye</Text>
-
       {/* Button Container */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.customButton}
           onPress={() => navigation.navigate('MB')}
         >
-          <Text style={styles.buttonText}>Message Board</Text>
+          <Text style={styles.buttonText}>Discussion Forum</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.customButton}
           onPress={() => navigation.navigate('Event')}
         >
           <Text style={styles.buttonText}>Event Board</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.customButton}
           onPress={() => navigation.navigate('Sales')}
         >
-          <Text style={styles.buttonText}>Sales Board</Text>
+          <Text style={styles.buttonText}>Sale Listings</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.customButton}
           onPress={() => navigation.navigate('Maps')}
