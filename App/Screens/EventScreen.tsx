@@ -43,7 +43,7 @@ const EventScreen: React.FC = () => {
   useEffect(() => {
     const fetchEventPosts = async () => {
       try {
-        const response = await axios.get('http://10.125.253.98:5000/api/events/recent?limit=10');
+        const response = await axios.get('http://192.168.1.32:5000/api/events/recent?limit=10');
         setEvents(response.data);
       } catch (error) {
         console.error('Error fetching event posts:', error);

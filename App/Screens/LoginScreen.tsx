@@ -25,7 +25,7 @@ const Login: React.FC<LoginScreenProps> = ({ navigation }) => {
   const handleLogin = async () => {
     if (email && password) {
       try {
-        const response = await axios.post('http://10.125.253.98:5000/api/users/login', { email, password });
+        const response = await axios.post('http://192.168.1.32:5000/api/users/login', { email, password });
         if (response.data.user) {
           Alert.alert('Success', 'Logged in successfully');
           navigation.navigate('Home'); // Redirect to Home on successful login

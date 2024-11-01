@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'EventPost'>;
 
 const createEventPost = async (heading: string, content: string, imageUrl: string) => {
   try {
-    const response = await axios.post('http://10.125.253.98/api/events', {
+    const response = await axios.post('http://192.168.1.32:5000/api/events', {
       heading,
       content,
       ownerId: '1',  // Hardcoded Owner ID
