@@ -11,7 +11,7 @@ const SignUp: React.FC = () => {
   const handleSignUp = async () => {
     if (username && email && password) {
       try {
-        const response = await axios.post('http://10.125.253.98:5000/api/users', {
+        const response = await axios.post('http://192.168.1.32:5000/api/users', {
           username,
           email,
           password

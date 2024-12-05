@@ -44,7 +44,7 @@ const SalesScreen: React.FC = () => {
   useEffect(() => {
     const fetchEventPosts = async () => {
       try {
-        const response = await axios.get('http://10.125.187.176:5000/api/sales/recent?limit=10');
+        const response = await axios.get('http:/192.168.1.32:5000/api/sales/recent?limit=10');
         setSales(response.data);
       } catch (error) {
         console.error('Error fetching event posts:', error);
