@@ -1,94 +1,77 @@
+// SalesScreen.tsx
+
 import React, { useEffect, useState } from 'react';
-import { Image, Button, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Image } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
 type RootStackParamList = {
-  Home: undefined;
-  Test: undefined;
-  Login: undefined;
-  MB: undefined;
-  Event: undefined;
-  Sales : undefined;
-  Maps: undefined;
-  SignUp: undefined;
-  SalesPost: undefined;
+  Sales: undefined;
+  SComment: { parentSalesId: number; heading: string; content: string; image_url: string }; // Pass image_url here
 };
 
-type SalesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Sales'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Sales'>;
 
-type SalePost = {
+type Post = {
   post_id: number;
   heading: string;
   content: string;
-  owner_id: number;
-  post_date: string;
-  image_url: string;
+  image_url: string; // Ensure image_url is included in the Post type
 };
 
-const SalesScreen: React.FC = () => {
-  const navigation = useNavigation<SalesScreenNavigationProp>();
-  const [sales, setSales] = useState<SalePost[]>([]);
+const SalesScreen: React.FC<Props> = ({ navigation }) => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Fetch sales posts on component mount
   useEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => (
-        <Button title="Post" onPress={() => navigation.navigate('SalesPost')} />
-      ),
-    });
-  }, [navigation]);
-
-  useEffect(() => {
-    const fetchEventPosts = async () => {
+    const fetchPosts = async () => {
       try {
-        const response = await axios.get('http:/192.168.1.32:5000/api/sales/recent?limit=10');
-        setSales(response.data);
+        const response = await axios.get('http://192.168.1.32:5000/api/sales/recent');
+        setPosts(response.data);
       } catch (error) {
-        console.error('Error fetching event posts:', error);
+        console.error('Error fetching sales posts:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEventPosts();
+    fetchPosts();
   }, []);
 
+  // Show a loading spinner while fetching posts
   if (loading) {
     return <ActivityIndicator size="large" color="#119B28" />;
   }
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.heading}>Sales Posts</Text>
-
-        {sales.length > 0 ? (
-          sales.map((sale) => (
-            <View key={sale.post_id} style={styles.topicCard}>
-              <View style={styles.imageContainer}>
-                {sale.image_url && (
-                  <Image source={{ uri: sale.image_url }} style={styles.topicImage} resizeMode="cover" />
-                )}
-                <Text style={styles.imageOverlayText}>{sale.heading}</Text>
-              </View>
-
-              <View style={styles.topicDetails}>
-                <TouchableOpacity>
-                  <Text style={styles.topicTitle}>{sale.heading}</Text>
-                </TouchableOpacity>
-                <Text style={styles.topicInfo}>
-                  Posted by <Text style={styles.topicAuthor}>{sale.owner_id}</Text> | {sale.content} | Last activity: {sale.post_date}
-                </Text>
-              </View>
-            </View>
-          ))
-        ) : (
-          <Text>No sales available.</Text>
+      <Text style={styles.heading}>Sales Posts</Text>
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.post_id.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.postCard}
+            onPress={() =>
+              navigation.navigate('SComment', {
+                parentSalesId: item.post_id, // Pass parentSalesId to the next screen
+                heading: item.heading,
+                content: item.content,
+                image_url: item.image_url, // Pass image_url to the next screen
+              })
+            }
+          >
+            {item.image_url && (
+              <Image source={{ uri: item.image_url }} style={styles.postImage} />
+            )}
+            <Text style={styles.postHeading}>{item.heading}</Text>
+            <Text numberOfLines={2} style={styles.postContent}>
+              {item.content}
+            </Text>
+          </TouchableOpacity>
         )}
-      </ScrollView>
+      />
     </View>
   );
 };
@@ -99,13 +82,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f8f9fa',
   },
-  scrollContent: {
-    alignItems: 'center',
-    padding: 20,
-    flex: 1,
-    width: '100%', 
-    justifyContent: 'flex-start',
-  },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -113,52 +89,28 @@ const styles = StyleSheet.create({
     color: '#119B28',
     textAlign: 'center',
   },
-  topicCard: {
-    flexDirection: 'column',
+  postCard: {
     borderColor: '#ccc',
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
     borderRadius: 5,
+    padding: 15,
+    marginBottom: 10,
     backgroundColor: '#fff',
-    width: '100%',
   },
-  imageContainer: {
+  postImage: {
     width: '100%',
     height: 200,
     borderRadius: 5,
-    overflow: 'hidden',
+    marginBottom: 10,
   },
-  topicImage: {
-    width: '100%',
-    height: '100%',
-  },
-  imageOverlayText: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: 3,
-  },
-  topicDetails: {
-    marginTop: 10,
-  },
-  topicTitle: {
-    color: '#119B28',
+  postHeading: {
     fontSize: 18,
-    marginBottom: 5,
-  },
-  topicInfo: {
-    color: '#777',
-  },
-  topicAuthor: {
     fontWeight: 'bold',
-    color: '#117328',
+    marginBottom: 5,
+    color: '#333',
+  },
+  postContent: {
+    color: '#555',
   },
 });
 
