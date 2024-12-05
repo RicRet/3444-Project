@@ -12,10 +12,10 @@ type RootStackParamList = {
     Sales: undefined;
     Maps: undefined;
     MBPost: undefined;
-    Comment: undefined;
+    MBComment: undefined;
   };
 
-  type Props = NativeStackScreenProps<RootStackParamList, 'Comment'>;
+  type Props = NativeStackScreenProps<RootStackParamList, 'MBComment'>;
 
   type Comments = {
     owner_id: number;
@@ -24,23 +24,23 @@ type RootStackParamList = {
     post_id: number;
   }
 
-  const CommentScreen: React.FC = () => {
-    const [comments, setComments] = useState<Comments[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+  const MBCommentScreen: React.FC = () => {
+    const [mbcomments, setMBComments] = useState<Comments[]>([]);
+    const [loading, setMBLoading] = useState<boolean>(true);
   
     useEffect(() => {
-      const fetchComments = async () => {
+      const fetchMBComments = async () => {
         try {
-          const response = await axios.get('comments');
-          setComments(response.data);
+          const response = await axios.get('mbcomments');
+          setMBComments(response.data);
         } catch (error) {
           console.error('Error fetching comments:', error);
         } finally {
-          setLoading(false);
+          setMBLoading(false);
         }
       };
   
-      fetchComments();
+      fetchMBComments();
     }, []);0
   
     if (loading) {
@@ -51,8 +51,8 @@ type RootStackParamList = {
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Text style={styles.heading}>Comments</Text>
-          {comments.length > 0 ? (
-            comments.map((comment) => (
+          {mbcomments.length > 0 ? (
+            mbcomments.map((comment) => (
               <View key={comment.post_id} style={styles.commentCard}>
                   <Text style={styles.commentInfo}>
                     Posted by <Text style={styles.commentAuthor}>{comment.owner_id}</Text> | {comment.content} | Posted at: {comment.post_date}
@@ -106,4 +106,4 @@ type RootStackParamList = {
       },
     });
 
-  export default CommentScreen;
+  export default MBCommentScreen;
