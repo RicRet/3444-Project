@@ -1,109 +1,163 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, Image, TextInput, Button, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
 type RootStackParamList = {
-    Home: undefined;
-    Test: undefined;
-    Login: undefined;
-    MB: undefined;
-    Event: undefined;
-    Sales: undefined;
-    Maps: undefined;
-    MBPost: undefined;
-    MBComment: undefined;
+  MBComment: { parentPostId: number; heading: string; content: string; image_url: string };
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, 'MBComment'>;
+
+type Comment = {
+  post_id: number;
+  content: string;
+  owner_id: number;
+  post_date: string;
+};
+
+const MBCommentScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { parentPostId, heading, content, image_url } = route.params;
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [replyText, setReplyText] = useState<string>(''); // State to handle the reply input
+
+  // Fetch comments for the post on component mount
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://192.168.1.32:5000/api/dbReplies/${parentPostId}/replies`);
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchComments();
+  }, [parentPostId]);
+
+  const handleReplySubmit = () => {
+    if (replyText.trim().length === 0) {
+      Alert.alert('Error', 'Reply cannot be empty.');
+      return;
+    }
+    // Simulate a successful submission
+    Alert.alert('Reply Submitted', `Your reply: "${replyText}"`);
+    setReplyText(''); // Clear the input field after submission
   };
 
-  type Props = NativeStackScreenProps<RootStackParamList, 'MBComment'>;
-
-  type Comments = {
-    owner_id: number;
-    content: string;
-    post_date: number;
-    post_id: number;
+  // Show a loading spinner while fetching comments
+  if (loading) {
+    return <ActivityIndicator size="large" color="#119B28" />;
   }
 
-  const MBCommentScreen: React.FC = () => {
-    const [mbcomments, setMBComments] = useState<Comments[]>([]);
-    const [loading, setMBLoading] = useState<boolean>(true);
-  
-    useEffect(() => {
-      const fetchMBComments = async () => {
-        try {
-          const response = await axios.get('mbcomments');
-          setMBComments(response.data);
-        } catch (error) {
-          console.error('Error fetching comments:', error);
-        } finally {
-          setMBLoading(false);
-        }
-      };
-  
-      fetchMBComments();
-    }, []);0
-  
-    if (loading) {
-      return <ActivityIndicator size="large" color="#119B28" />;
-    }
-  
-    return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Text style={styles.heading}>Comments</Text>
-          {mbcomments.length > 0 ? (
-            mbcomments.map((comment) => (
-              <View key={comment.post_id} style={styles.commentCard}>
-                  <Text style={styles.commentInfo}>
-                    Posted by <Text style={styles.commentAuthor}>{comment.owner_id}</Text> | {comment.content} | Posted at: {comment.post_date}
-                  </Text>
-              </View>
-            ))
-          ) : (
-            <Text>No Comments.</Text>
-          )}
-        </ScrollView>
+  // Validate the image_url before using it
+  const validImageUrl = image_url && typeof image_url === 'string' && image_url.startsWith('http');
+
+  return (
+    <View style={styles.container}>
+      {/* Only render the image if it's a valid URL */}
+      {validImageUrl ? (
+        <Image source={{ uri: image_url }} style={styles.postImage} />
+      ) : (
+        <Text style={styles.noImage}>No image available</Text>
+      )}
+
+      <Text style={styles.heading}>{heading}</Text>
+      <Text style={styles.content}>{content}</Text>
+
+      {/* Comments List */}
+      <FlatList
+        data={comments}
+        keyExtractor={(item) => item.post_id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.commentCard}>
+            <Text style={styles.commentContent}>{item.content}</Text>
+            <Text style={styles.commentAuthor}>Posted by User {item.owner_id}</Text>
+            <Text style={styles.commentDate}>{new Date(item.post_date).toLocaleString()}</Text>
+          </View>
+        )}
+      />
+
+      {/* Reply Input Section */}
+      <View style={styles.replyContainer}>
+        <TextInput
+          style={styles.replyInput}
+          placeholder="Write a reply..."
+          value={replyText}
+          onChangeText={setReplyText}
+        />
+        <Button title="Submit" onPress={handleReplySubmit} color="#119B28" />
       </View>
-    );
-  };
+    </View>
+  );
+};
 
-  const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#f8f9fa',
-      },
-      scrollContent: {
-        alignItems: 'center',
-        padding: 20,
-        flex: 1,
-        width: '100%', 
-        justifyContent: 'flex-start',
-      },
-      heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#119B28',
-        textAlign: 'center',
-      },
-      commentCard: {
-        flexDirection: 'column',
-        borderColor: '#ccc',
-        borderWidth: 1,
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 5,
-        backgroundColor: '#fff',
-        width: '100%',
-      },
-      commentInfo: {
-        color: '#777',
-      },
-      commentAuthor: {
-        fontWeight: 'bold',
-        color: '#117328',
-      },
-    });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f8f9fa',
+  },
+  postImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  noImage: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#119B28',
+  },
+  content: {
+    color: '#555',
+    marginBottom: 20,
+  },
+  commentCard: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+  },
+  commentContent: {
+    color: '#333',
+    marginBottom: 5,
+  },
+  commentAuthor: {
+    fontSize: 14,
+    color: '#117328',
+    marginBottom: 5,
+  },
+  commentDate: {
+    fontSize: 12,
+    color: '#888',
+  },
+  replyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  replyInput: {
+    flex: 1,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    backgroundColor: '#fff',
+  },
+});
 
-  export default MBCommentScreen;
+export default MBCommentScreen;

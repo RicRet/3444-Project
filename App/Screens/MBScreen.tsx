@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Button, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Image, Button } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
 type RootStackParamList = {
-  Home: undefined;
-  Test: undefined;
-  Login: undefined;
   MB: undefined;
-  Event: undefined;
-  Sales: undefined;
-  Maps: undefined;
-  SignUp: undefined;
-  MBPost: undefined;
+  MBComment: { parentPostId: number; heading: string; content: string; image_url: string };
+  MBPost: undefined; // Add the MBPost screen type
 };
 
-type MBScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MB'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'MB'>;
 
-type Topic = {
+type Post = {
   post_id: number;
   heading: string;
   content: string;
-  owner_id: number;
-  post_date: string;
-  image_url: string; // Added the image_url property
+  image_url: string;
 };
 
-const MBScreen: React.FC = () => {
-  const navigation = useNavigation<MBScreenNavigationProp>();
-  const [topics, setTopics] = useState<Topic[]>([]); // Store the fetched posts
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
+const MBScreen: React.FC<Props> = ({ navigation }) => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // Add the "Post" button to the top-right corner
     navigation.setOptions({
       headerRight: () => (
         <Button title="Post" onPress={() => navigation.navigate('MBPost')} />
@@ -40,20 +31,20 @@ const MBScreen: React.FC = () => {
     });
   }, [navigation]);
 
+  // Fetch MB posts on component mount
   useEffect(() => {
-    // Fetch recent posts from the backend
-    const fetchRecentPosts = async () => {
+    const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://192.168.1.32:5000/api/dbposts/recent?limit=10'); // Update with your actual API URL
-        setTopics(response.data); // Set the fetched posts
+        const response = await axios.get('http://192.168.1.32:5000/api/dbposts/recent?limit=10');
+        setPosts(response.data);
       } catch (error) {
-        console.error('Error fetching recent posts:', error);
+        console.error('Error fetching MB posts:', error);
       } finally {
-        setLoading(false); // Stop loading after the request completes
+        setLoading(false);
       }
     };
 
-    fetchRecentPosts();
+    fetchPosts();
   }, []);
 
   if (loading) {
@@ -62,33 +53,32 @@ const MBScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.heading}>Forum Topics</Text>
-
-        {topics.length > 0 ? (
-          topics.map((topic) => (
-            <View key={topic.post_id} style={styles.topicCard}>
-              <View style={styles.imageContainer}>
-                {topic.image_url && (
-                  <Image source={{ uri: topic.image_url }} style={styles.topicImage} resizeMode="cover" />
-                )}
-                <Text style={styles.imageOverlayText}>{topic.heading}</Text>
-              </View>
-
-              <View style={styles.topicDetails}>
-                <TouchableOpacity>
-                  <Text style={styles.topicTitle}>{topic.heading}</Text>
-                </TouchableOpacity>
-                <Text style={styles.topicInfo}>
-                  Posted by <Text style={styles.topicAuthor}>{topic.owner_id}</Text> | {topic.content} | Last activity: {topic.post_date}
-                </Text>
-              </View>
-            </View>
-          ))
-        ) : (
-          <Text>No topics available.</Text>
+      <Text style={styles.heading}>Message Board Posts</Text>
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.post_id.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.postCard}
+            onPress={() =>
+              navigation.navigate('MBComment', {
+                parentPostId: item.post_id,
+                heading: item.heading,
+                content: item.content,
+                image_url: item.image_url,
+              })
+            }
+          >
+            {item.image_url && (
+              <Image source={{ uri: item.image_url }} style={styles.postImage} />
+            )}
+            <Text style={styles.postHeading}>{item.heading}</Text>
+            <Text numberOfLines={2} style={styles.postContent}>
+              {item.content}
+            </Text>
+          </TouchableOpacity>
         )}
-      </ScrollView>
+      />
     </View>
   );
 };
@@ -96,59 +86,38 @@ const MBScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  scrollContent: {
-    alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f8f9fa',
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#119B28',
+    textAlign: 'center',
   },
-  topicCard: {
-    borderRadius: 8,
-    marginBottom: 15,
-    overflow: 'hidden',
+  postCard: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 15,
+    marginBottom: 10,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-    width: '90%',
   },
-  imageContainer: {
-    position: 'relative',
-  },
-  topicImage: {
+  postImage: {
     width: '100%',
     height: 200,
+    borderRadius: 5,
+    marginBottom: 10,
   },
-  topicDetails: {
-    padding: 15,
-  },
-  topicTitle: {
+  postHeading: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#333',
   },
-  topicInfo: {
-    fontSize: 14,
-    color: '#6c757d',
-  },
-  topicAuthor: {
-    fontWeight: 'bold',
-  },
-  imageOverlayText: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    color: '#fff',
-    fontSize: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 5,
-    borderRadius: 5,
+  postContent: {
+    color: '#555',
   },
 });
 

@@ -1,13 +1,12 @@
-// SalesScreen.tsx
-
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Image, Button } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
 type RootStackParamList = {
   Sales: undefined;
-  SComment: { parentSalesId: number; heading: string; content: string; image_url: string }; // Pass image_url here
+  SComment: { parentSalesId: number; heading: string; content: string; image_url: string };
+  SalesPost: undefined; // Add the SalesPost screen type
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sales'>;
@@ -16,12 +15,21 @@ type Post = {
   post_id: number;
   heading: string;
   content: string;
-  image_url: string; // Ensure image_url is included in the Post type
+  image_url: string;
 };
 
 const SalesScreen: React.FC<Props> = ({ navigation }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Add the "Post" button to the top-right corner
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button title="Post" onPress={() => navigation.navigate('SalesPost')} />
+      ),
+    });
+  }, [navigation]);
 
   // Fetch sales posts on component mount
   useEffect(() => {
@@ -55,10 +63,10 @@ const SalesScreen: React.FC<Props> = ({ navigation }) => {
             style={styles.postCard}
             onPress={() =>
               navigation.navigate('SComment', {
-                parentSalesId: item.post_id, // Pass parentSalesId to the next screen
+                parentSalesId: item.post_id,
                 heading: item.heading,
                 content: item.content,
-                image_url: item.image_url, // Pass image_url to the next screen
+                image_url: item.image_url,
               })
             }
           >

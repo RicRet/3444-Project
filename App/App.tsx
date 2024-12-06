@@ -13,6 +13,7 @@ import SignUp from './Screens/SignUpScreen.tsx';
 import EventPost from './Screens/EventPostScreen.tsx';
 import SalesPost from './Screens/SalesPostScreen.tsx';
 import SalesCommentScreen from './Screens/SalesCommentScreen.tsx'; // Correct the import
+import MBCommentScreen from './Screens/MBCommentScreen.tsx';
 
 type RootStackParamList = {
   Home: undefined;
@@ -27,6 +28,7 @@ type RootStackParamList = {
   EventPost: undefined;
   SalesPost: undefined;
   SComment: { parentSalesId: number; heading: string; content: string; image_url: string }; // Correct the params
+  MBComment: { parentPostId: number; heading: string; content: string; image_url: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -47,6 +49,7 @@ export default function App() {
         <Stack.Screen name="EventPost" component={EventPost} />
         <Stack.Screen name="SalesPost" component={SalesPost} />
         <Stack.Screen name="SComment" component={SalesCommentScreen} />
+        <Stack.Screen name="MBComment" component={MBCommentScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

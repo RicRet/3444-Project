@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, Image, TextInput, Button, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 
@@ -20,6 +20,7 @@ const SalesCommentScreen: React.FC<Props> = ({ route, navigation }) => {
   const { parentSalesId, heading, content, image_url } = route.params;
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [newReply, setNewReply] = useState<string>('');
 
   // Fetch comments for the post on component mount
   useEffect(() => {
@@ -37,6 +38,24 @@ const SalesCommentScreen: React.FC<Props> = ({ route, navigation }) => {
     fetchComments();
   }, [parentSalesId]);
 
+  // Simulate a reply submission
+  const handleReplySubmit = () => {
+    if (newReply.trim() === '') {
+      Alert.alert('Reply cannot be empty.');
+      return;
+    }
+    // Simulate adding a reply to the list
+    const simulatedReply = {
+      reply_id: comments.length + 1, // Simulate a unique ID
+      content: newReply,
+      owner_id: 1, // Simulate a default user ID
+      post_date: new Date().toISOString(),
+    };
+    setComments((prevComments) => [...prevComments, simulatedReply]);
+    setNewReply('');
+    Alert.alert('Reply submitted successfully!');
+  };
+
   // Show a loading spinner while fetching comments
   if (loading) {
     return <ActivityIndicator size="large" color="#119B28" />;
@@ -44,7 +63,7 @@ const SalesCommentScreen: React.FC<Props> = ({ route, navigation }) => {
 
   // Validate the image_url before using it
   const validImageUrl = image_url && typeof image_url === 'string' && image_url.startsWith('http');
-  
+
   return (
     <View style={styles.container}>
       {/* Only render the image if it's a valid URL */}
@@ -53,7 +72,7 @@ const SalesCommentScreen: React.FC<Props> = ({ route, navigation }) => {
       ) : (
         <Text style={styles.noImage}>No image available</Text>
       )}
-      
+
       <Text style={styles.heading}>{heading}</Text>
       <Text style={styles.content}>{content}</Text>
 
@@ -68,6 +87,17 @@ const SalesCommentScreen: React.FC<Props> = ({ route, navigation }) => {
           </View>
         )}
       />
+
+      {/* Reply Input Section */}
+      <View style={styles.replySection}>
+        <TextInput
+          style={styles.replyInput}
+          placeholder="Write your reply..."
+          value={newReply}
+          onChangeText={setNewReply}
+        />
+        <Button title="Submit" onPress={handleReplySubmit} color="#119B28" />
+      </View>
     </View>
   );
 };
@@ -115,6 +145,20 @@ const styles = StyleSheet.create({
   commentDate: {
     fontSize: 12,
     color: '#888',
+  },
+  replySection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  replyInput: {
+    flex: 1,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
+    backgroundColor: '#fff',
   },
 });
 
